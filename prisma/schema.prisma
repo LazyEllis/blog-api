@@ -7,3 +7,43 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id       Int       @id @default(autoincrement())
+  username String    @unique
+  password String
+  posts    Post[]
+  comments Comment[]
+
+  @@map("users")
+}
+
+model Post {
+  id        Int       @id @default(autoincrement())
+  title     String
+  content   String
+  status    Status
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  author    User      @relation(fields: [authorId], references: [id])
+  authorId  Int       @map("author_id")
+  comments  Comment[]
+
+  @@map("posts")
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  Int      @map("author_id")
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    Int      @map("post_id")
+
+  @@map("comments")
+}
+
+enum Status {
+  PUBLISHED
+  DRAFT
+}
