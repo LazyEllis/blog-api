@@ -42,3 +42,17 @@ export const validateUser = validate([
     .custom((value, { req }) => value === req.body.password)
     .withMessage("The passwords must match."),
 ]);
+
+export const validatePost = validate([
+  body("title")
+    .trim()
+    .notEmpty()
+    .withMessage("You must enter a title for your post."),
+  body("content")
+    .trim()
+    .notEmpty()
+    .withMessage("You must enter content for your post."),
+  body("status")
+    .isIn(["PUBLISHED", "DRAFT"])
+    .withMessage("Your post's status must be either 'PUBLISHED' OR 'DRAFT'"),
+]);
