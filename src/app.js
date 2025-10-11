@@ -5,6 +5,7 @@ import "./lib/passport.js";
 import userRouter from "./routes/userRouter.js";
 import authRouter from "./routes/authRouter.js";
 import postRouter from "./routes/postRouter.js";
+import commentRouter from "./routes/commentRouter.js";
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(cors());
 app.use("/users", userRouter);
 app.use("/auth", authRouter);
 app.use("/posts", postRouter);
+app.use("/posts/:postId/comments", commentRouter);
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {

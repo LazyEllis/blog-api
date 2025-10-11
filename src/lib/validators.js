@@ -56,3 +56,10 @@ export const validatePost = validate([
     .isIn(["PUBLISHED", "DRAFT"])
     .withMessage("Your post's status must be either 'PUBLISHED' OR 'DRAFT'"),
 ]);
+
+export const validateComment = validate([
+  body("content")
+    .trim()
+    .notEmpty()
+    .withMessage("You must enter content for your comment."),
+]);
