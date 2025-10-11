@@ -81,7 +81,7 @@ export const createPost = async (req, res) => {
     },
   });
 
-  res.json(post);
+  res.status(201).json(post);
 };
 
 export const updatePost = async (req, res) => {
@@ -144,11 +144,11 @@ export const deletePost = async (req, res) => {
     throw new ForbiddenError("You do not have permission to delete this post");
   }
 
-  const deletedPost = await prisma.post.delete({
+  await prisma.post.delete({
     where: {
       id: Number(postId),
     },
   });
 
-  res.json(deletedPost);
+  res.status(204).end();
 };

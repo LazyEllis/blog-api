@@ -79,7 +79,7 @@ export const createComment = async (req, res) => {
     },
   });
 
-  res.json(comment);
+  res.status(201).json(comment);
 };
 
 export const updateComment = async (req, res) => {
@@ -148,11 +148,11 @@ export const deleteComment = async (req, res) => {
     );
   }
 
-  const deletedComment = await prisma.comment.delete({
+  await prisma.comment.delete({
     where: {
       id: Number(commentId),
     },
   });
 
-  res.json(deletedComment);
+  res.status(204).end();
 };
