@@ -14,7 +14,7 @@ export const checkPostExists = async (req, res, next) => {
     throw new NotFoundError("Post Not Found");
   }
 
-  if (post.status === "DRAFT") {
+  if (!post.isPublished) {
     throw new ForbiddenError(
       post.authorId !== req.user?.id
         ? "You do not have permission to access this post"

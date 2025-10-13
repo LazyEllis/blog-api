@@ -4,7 +4,7 @@ import prisma from "../lib/prisma.js";
 export const listPublishedPosts = async (req, res) => {
   const posts = await prisma.post.findMany({
     where: {
-      status: "PUBLISHED",
+      isPublished: true,
     },
     orderBy: {
       createdAt: "desc",
@@ -53,7 +53,7 @@ export const getPost = async (req, res) => {
     throw new NotFoundError("Post not found");
   }
 
-  if (post.status === "DRAFT" && post.author.id !== req.user?.id) {
+  if (!post.isPublished && post.author.id !== req.user?.id) {
     throw new ForbiddenError("You do not have permission to access this post");
   }
 
@@ -62,10 +62,10 @@ export const getPost = async (req, res) => {
 
 export const createPost = async (req, res) => {
   const { id } = req.user;
-  const { title, content, status } = req.body;
+  const { title, content, isPublished } = req.body;
 
   const post = await prisma.post.create({
-    data: { title, content, status, authorId: id },
+    data: { title, content, isPublished, authorId: id },
     omit: {
       authorId: true,
     },
@@ -87,7 +87,7 @@ export const createPost = async (req, res) => {
 export const updatePost = async (req, res) => {
   const { id } = req.user;
   const { postId } = req.params;
-  const { title, content, status } = req.body;
+  const { title, content, isPublished } = req.body;
 
   const post = await prisma.post.findUnique({
     where: {
@@ -104,7 +104,7 @@ export const updatePost = async (req, res) => {
   }
 
   const updatedPost = await prisma.post.update({
-    data: { title, content, status },
+    data: { title, content, isPublished },
     where: {
       id: Number(postId),
     },

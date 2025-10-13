@@ -52,9 +52,10 @@ export const validatePost = validate([
     .trim()
     .notEmpty()
     .withMessage("You must enter content for your post."),
-  body("status")
-    .isIn(["PUBLISHED", "DRAFT"])
-    .withMessage("Your post's status must be either 'PUBLISHED' OR 'DRAFT'"),
+  body("isPublished")
+    .isBoolean()
+    .toBoolean()
+    .withMessage("Please specify whether the post is published or not."),
 ]);
 
 export const validateComment = validate([
