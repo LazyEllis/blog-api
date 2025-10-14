@@ -31,12 +31,13 @@ export const listCurrentUserPosts = async (req, res) => {
 };
 
 export const createUser = async (req, res) => {
-  const { username, password } = req.body;
+  const { name, email, password } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const user = await prisma.user.create({
     data: {
-      username,
+      name,
+      email,
       password: hashedPassword,
     },
     omit: {

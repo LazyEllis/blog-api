@@ -15,22 +15,27 @@ const validate = (validators) => [
 ];
 
 export const validateUser = validate([
-  body("username")
+  body("name")
     .trim()
     .notEmpty()
-    .withMessage("You must enter your username.")
-    .isAlphanumeric("en-US", { ignore: "_.-" })
-    .withMessage(
-      "Your username must only contain letters, numbers, underscores, periods and hyphens.",
-    )
+    .withMessage("You must enter your display name")
+    .isLength({ max: 50 })
+    .withMessage("Your display name must be within 50 characters"),
+  body("email")
+    .trim()
+    .notEmpty()
+    .withMessage("You must enter your email.")
+    .isEmail()
+    .withMessage("You must enter a valid email.")
+    .toLowerCase()
     .bail()
     .custom(async (value) => {
       const user = await prisma.user.findUnique({
-        where: { username: value },
+        where: { email: value },
       });
 
       if (user) {
-        throw new Error("This username is already in use.");
+        throw new Error("This email is already in use.");
       }
     }),
   body("password")
@@ -42,6 +47,8 @@ export const validateUser = validate([
     .custom((value, { req }) => value === req.body.password)
     .withMessage("The passwords must match."),
 ]);
+
+export const sanitizeEmail = body("email").trim().toLowerCase();
 
 export const validatePost = validate([
   body("title")

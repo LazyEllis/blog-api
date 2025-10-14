@@ -15,6 +15,7 @@ export const listComments = async (req, res) => {
     include: {
       author: {
         omit: {
+          email: true,
           password: true,
         },
       },
@@ -42,6 +43,7 @@ export const getComment = async (req, res) => {
     include: {
       author: {
         omit: {
+          email: true,
           password: true,
         },
       },
@@ -73,6 +75,7 @@ export const createComment = async (req, res) => {
     include: {
       author: {
         omit: {
+          email: true,
           password: true,
         },
       },
@@ -115,6 +118,7 @@ export const updateComment = async (req, res) => {
     include: {
       author: {
         omit: {
+          email: true,
           password: true,
         },
       },

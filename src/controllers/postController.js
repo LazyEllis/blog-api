@@ -15,6 +15,7 @@ export const listPublishedPosts = async (req, res) => {
     include: {
       author: {
         omit: {
+          email: true,
           password: true,
         },
       },
@@ -40,6 +41,7 @@ export const getPost = async (req, res) => {
     include: {
       author: {
         omit: {
+          email: true,
           password: true,
         },
       },
@@ -72,6 +74,7 @@ export const createPost = async (req, res) => {
     include: {
       author: {
         omit: {
+          email: true,
           password: true,
         },
       },
@@ -114,6 +117,7 @@ export const updatePost = async (req, res) => {
     include: {
       author: {
         omit: {
+          email: true,
           password: true,
         },
       },
