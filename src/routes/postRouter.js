@@ -3,7 +3,7 @@ import {
   createPost,
   deletePost,
   getPost,
-  listPublishedPosts,
+  listPosts,
   updatePost,
 } from "../controllers/postController.js";
 import { optionalAuth, requireAdmin } from "../lib/auth.js";
@@ -11,7 +11,7 @@ import { validatePost } from "../lib/validators.js";
 
 const postRouter = Router();
 
-postRouter.get("/", listPublishedPosts);
+postRouter.get("/", optionalAuth, listPosts);
 
 postRouter.get("/:postId", optionalAuth, getPost);
 

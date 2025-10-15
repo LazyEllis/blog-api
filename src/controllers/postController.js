@@ -1,11 +1,13 @@
 import { ForbiddenError, NotFoundError } from "../lib/errors.js";
 import prisma from "../lib/prisma.js";
 
-export const listPublishedPosts = async (req, res) => {
+export const listPosts = async (req, res) => {
   const posts = await prisma.post.findMany({
-    where: {
-      isPublished: true,
-    },
+    ...(!req.user?.isAdmin && {
+      where: {
+        isPublished: true,
+      },
+    }),
     orderBy: {
       createdAt: "desc",
     },
