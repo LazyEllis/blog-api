@@ -86,7 +86,7 @@ export const createComment = async (req, res) => {
 };
 
 export const updateComment = async (req, res) => {
-  const { id } = req.user;
+  const { id, isAdmin } = req.user;
   const { postId, commentId } = req.params;
   const { content } = req.body;
 
@@ -101,7 +101,7 @@ export const updateComment = async (req, res) => {
     throw new NotFoundError("Comment Not Found");
   }
 
-  if (comment.authorId !== id) {
+  if (comment.authorId !== id && !isAdmin) {
     throw new ForbiddenError(
       "You do not have permission to update this comment",
     );
@@ -132,7 +132,7 @@ export const updateComment = async (req, res) => {
 };
 
 export const deleteComment = async (req, res) => {
-  const { id } = req.user;
+  const { id, isAdmin } = req.user;
   const { postId, commentId } = req.params;
 
   const comment = await prisma.comment.findUnique({
@@ -146,7 +146,7 @@ export const deleteComment = async (req, res) => {
     throw new NotFoundError("Comment Not Found");
   }
 
-  if (comment.authorId !== id) {
+  if (comment.authorId !== id && !isAdmin) {
     throw new ForbiddenError(
       "You do not have permission to delete this comment",
     );
