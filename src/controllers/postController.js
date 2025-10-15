@@ -9,16 +9,7 @@ export const listPublishedPosts = async (req, res) => {
     orderBy: {
       createdAt: "desc",
     },
-    omit: {
-      authorId: true,
-    },
     include: {
-      author: {
-        omit: {
-          email: true,
-          password: true,
-        },
-      },
       _count: {
         select: { comments: true },
       },
@@ -35,16 +26,7 @@ export const getPost = async (req, res) => {
     where: {
       id: Number(postId),
     },
-    omit: {
-      authorId: true,
-    },
     include: {
-      author: {
-        omit: {
-          email: true,
-          password: true,
-        },
-      },
       _count: {
         select: { comments: true },
       },
@@ -55,7 +37,7 @@ export const getPost = async (req, res) => {
     throw new NotFoundError("Post not found");
   }
 
-  if (!post.isPublished && post.author.id !== req.user?.id) {
+  if (!post.isPublished && !req.user?.isAdmin) {
     throw new ForbiddenError("You do not have permission to access this post");
   }
 
@@ -63,21 +45,11 @@ export const getPost = async (req, res) => {
 };
 
 export const createPost = async (req, res) => {
-  const { id } = req.user;
   const { title, content, isPublished } = req.body;
 
   const post = await prisma.post.create({
-    data: { title, content, isPublished, authorId: id },
-    omit: {
-      authorId: true,
-    },
+    data: { title, content, isPublished },
     include: {
-      author: {
-        omit: {
-          email: true,
-          password: true,
-        },
-      },
       _count: {
         select: { comments: true },
       },
@@ -88,7 +60,6 @@ export const createPost = async (req, res) => {
 };
 
 export const updatePost = async (req, res) => {
-  const { id } = req.user;
   const { postId } = req.params;
   const { title, content, isPublished } = req.body;
 
@@ -102,25 +73,12 @@ export const updatePost = async (req, res) => {
     throw new NotFoundError("Post not found");
   }
 
-  if (post.authorId !== id) {
-    throw new ForbiddenError("You do not have permission to edit this post");
-  }
-
   const updatedPost = await prisma.post.update({
     data: { title, content, isPublished },
     where: {
       id: Number(postId),
     },
-    omit: {
-      authorId: true,
-    },
     include: {
-      author: {
-        omit: {
-          email: true,
-          password: true,
-        },
-      },
       _count: {
         select: { comments: true },
       },
@@ -131,7 +89,6 @@ export const updatePost = async (req, res) => {
 };
 
 export const deletePost = async (req, res) => {
-  const { id } = req.user;
   const { postId } = req.params;
 
   const post = await prisma.post.findUnique({
@@ -142,10 +99,6 @@ export const deletePost = async (req, res) => {
 
   if (!post) {
     throw new NotFoundError("Post not found");
-  }
-
-  if (post.authorId !== id) {
-    throw new ForbiddenError("You do not have permission to delete this post");
   }
 
   await prisma.post.delete({

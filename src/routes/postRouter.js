@@ -6,7 +6,7 @@ import {
   listPublishedPosts,
   updatePost,
 } from "../controllers/postController.js";
-import { optionalAuth, requireAuth } from "../lib/auth.js";
+import { optionalAuth, requireAdmin } from "../lib/auth.js";
 import { validatePost } from "../lib/validators.js";
 
 const postRouter = Router();
@@ -15,10 +15,10 @@ postRouter.get("/", listPublishedPosts);
 
 postRouter.get("/:postId", optionalAuth, getPost);
 
-postRouter.post("/", requireAuth, validatePost, createPost);
+postRouter.post("/", requireAdmin, validatePost, createPost);
 
-postRouter.put("/:postId", requireAuth, validatePost, updatePost);
+postRouter.put("/:postId", requireAdmin, validatePost, updatePost);
 
-postRouter.delete("/:postId", requireAuth, deletePost);
+postRouter.delete("/:postId", requireAdmin, deletePost);
 
 export default postRouter;

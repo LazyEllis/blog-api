@@ -35,7 +35,7 @@ passport.use(
 passport.use(
   new JWTStrategy(JWT_STRATEGY_CONFIG, async (jwt_payload, done) => {
     try {
-      return done(null, { id: jwt_payload.sub });
+      return done(null, { id: jwt_payload.sub, isAdmin: jwt_payload.isAdmin });
     } catch (error) {
       done(error);
     }

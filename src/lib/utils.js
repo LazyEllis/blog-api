@@ -14,12 +14,12 @@ export const checkPostExists = async (req, res, next) => {
     throw new NotFoundError("Post Not Found");
   }
 
-  if (!post.isPublished) {
-    throw new ForbiddenError(
-      post.authorId !== req.user?.id
-        ? "You do not have permission to access this post"
-        : "Comments on unpublished posts cannot be accessed",
-    );
+  if (!post.isPublished && !req.user?.isAdmin) {
+    throw new ForbiddenError("You do not have permission to access this post");
+  }
+
+  if (!post.isPublished && req.method === "POST") {
+    throw new ForbiddenError("You cannot create comments on unpublished posts");
   }
 
   next();

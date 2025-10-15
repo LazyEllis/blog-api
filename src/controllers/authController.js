@@ -11,9 +11,11 @@ export const generateToken = (req, res, next) => {
       return res.status(401).json({ error: info.message });
     }
 
-    const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET, {
-      expiresIn: "24h",
-    });
+    const token = jwt.sign(
+      { sub: user.id, isAdmin: user.isAdmin },
+      process.env.JWT_SECRET,
+      { expiresIn: "24h" },
+    );
 
     res.json({ token });
   })(req, res, next);
