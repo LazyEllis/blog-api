@@ -8,7 +8,7 @@ export const generateToken = (req, res, next) => {
     }
 
     if (!user) {
-      return res.status(401).json({ error: info.message });
+      return res.status(401).json({ message: info.message });
     }
 
     const token = jwt.sign(
