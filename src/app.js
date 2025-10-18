@@ -26,7 +26,7 @@ app.use("/", indexRouter);
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   console.error(err);
-  res.status(err.statusCode || 500).json({ message: err.message });
+  res.status(err.status || 500).json({ message: err.message });
 });
 
 const PORT = process.env.PORT || 3000;

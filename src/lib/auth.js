@@ -1,7 +1,10 @@
 import passport from "passport";
 import { ForbiddenError } from "./errors.js";
 
-export const requireAuth = passport.authenticate("jwt", { session: false });
+export const requireAuth = passport.authenticate("jwt", {
+  session: false,
+  failWithError: true,
+});
 
 export const optionalAuth = passport.authenticate(["jwt", "anonymous"], {
   session: false,
