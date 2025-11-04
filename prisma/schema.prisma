@@ -36,7 +36,7 @@ model Comment {
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
   author    User     @relation(fields: [authorId], references: [id])
   authorId  Int      @map("author_id")
-  post      Post     @relation(fields: [postId], references: [id])
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId    Int      @map("post_id")
 
   @@map("comments")
