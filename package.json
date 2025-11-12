@@ -8,7 +8,8 @@
     "start": "node src/app.js",
     "dev": "node --watch src/app.js",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "postinstall": "prisma migrate deploy"
   },
   "repository": {
     "type": "git",
