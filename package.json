@@ -5,11 +5,11 @@
   "description": "",
   "main": "src/app.js",
   "scripts": {
+    "build": "prisma migrate deploy",
     "start": "node src/app.js",
     "dev": "node --watch src/app.js",
     "lint": "eslint .",
-    "format": "prettier --write .",
-    "postinstall": "prisma migrate deploy"
+    "format": "prettier --write ."
   },
   "repository": {
     "type": "git",
